@@ -1,0 +1,9 @@
+# Environment
+v2x_env/
+env
+
+# Datasets
+data/nura_test_data/
+
+# Misc
+papers/
