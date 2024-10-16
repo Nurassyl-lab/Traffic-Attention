@@ -2,6 +2,9 @@
 v2x_env/
 env
 
+# Cache
+__pycache__/
+
 # Datasets
 data/nura_test_data/
 
