@@ -7,7 +7,7 @@ from matplotlib.animation import PillowWriter
 import math 
 
 # Wrap up all functoins below into a class
-class GridDatasetMaker:
+class GridMaker:
     def __init__ (self, grid_size, min_distance, flag=False):
         # Parameters
         self.grid_size = grid_size # size of the grid (grid_size x grid_size)
@@ -196,33 +196,33 @@ class GridDatasetMaker:
 
         return blue_pattern, red_pattern
 
-def update_grid(frame, grid, blue_pattern, red_pattern, text, mat, objects):
-    """
-    - Update the grid for each frame of the animation
-    """
-    mat = objects['mat']
+# def update_grid(frame, grid, blue_pattern, red_pattern, text, mat, objects):
+#     """
+#     - Update the grid for each frame of the animation
+#     """
+#     mat = objects['mat']
 
-    grid.fill(0)  # Clear the grid at each step
+#     grid.fill(0)  # Clear the grid at each step
     
-    if frame < len(blue_pattern):
-        # Update blue position
-        blue_pos = blue_pattern[frame]
-        grid[blue_pos] = 2  # Set blue rectangle
+#     if frame < len(blue_pattern):
+#         # Update blue position
+#         blue_pos = blue_pattern[frame]
+#         grid[blue_pos] = 2  # Set blue rectangle
     
-    if frame < len(red_pattern):
-        # Update red position
-        red_pos = red_pattern[frame]
-        grid[red_pos] = 1  # Set red rectangle
+#     if frame < len(red_pattern):
+#         # Update red position
+#         red_pos = red_pattern[frame]
+#         grid[red_pos] = 1  # Set red rectangle
     
-    # Update the plot
-    print('Befre set_data')
-    mat.set_data(grid)
-    print('After set_data')
+#     # Update the plot
+#     print('Befre set_data')
+#     mat.set_data(grid)
+#     print('After set_data')
 
-    # Update the frame number text
-    text.set_text(f'Frame: {frame}')
+#     # Update the frame number text
+#     text.set_text(f'Frame: {frame}')
     
-    return [mat, text]
+#     return [mat, text]
 
 
 class GridAnimator:
@@ -274,11 +274,11 @@ class GridAnimator:
 
 if __name__ == '__main__':
     """
-    - Example usage of the GridDatasetMaker class
+    - Example usage of the GridMaker class
     """
 
-    # Create an instance of the GridDatasetMaker class
-    my_grid = GridDatasetMaker(grid_size=10, min_distance=3, flag=True)
+    # Create an instance of the GridMaker class
+    my_grid = GridMaker(grid_size=10, min_distance=3, flag=True)
     
     # Create a grid
     my_grid.create_grid()
@@ -306,4 +306,4 @@ if __name__ == '__main__':
         my_animation = GridAnimator(my_grid.grid, blue_actions, red_actions, cmap)
 
         my_animation.animate()
-        
+     
