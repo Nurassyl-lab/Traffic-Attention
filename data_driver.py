@@ -1,7 +1,9 @@
-# Driver file for the data, datasets, dataloaders, and etc
+"""
+Driver file for the data, datasets, dataloaders, and etc
+"""
 
 import argparse
-from grid_maker import GridMaker
+from utils.grid_maker import GridMaker
 import pandas as pd 
 import numpy as np
 from tqdm import tqdm
