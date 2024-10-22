@@ -4,7 +4,7 @@
 - How does it work?
 - Additional
 
-# How-to-RUN
+# How-to-Run
 
 Do you want to try our code? Below, you can find a step-by-step guide that will show you how to do it.
 
@@ -26,8 +26,10 @@ Note that I use **Linux**, some of the steps may differ depending on OS.
 
 Do you want to know how our code works? Below, you can find an overview of how it works.
 
-### Grid Dataset Generation
-- Using tools in `grid_maker.py` we can generate a NxN grid, $\text{N}\in \mathbb{Z}$. Grid is empty, filled with 0's. Then we randomly generate initial positions for 2 objects. Given the grid, and object positions, we now can generate their actions. It is possible to generate a colliding actions, and non-colliding.
+### Small Experiment on the Grid with 2 moving objects
+
+##### Grid Dataset Generation
+- Using tools in `grid_maker.py` we can generate a NxN grid, $\text{N}\in \mathbb{Z}$. Grid is empty, filled with 0's. Then we randomly generate initial positions for 2 objects. Given the grid, and object positions, we now can generate their actions. It is possible to generate colliding actions, and non-colliding.
 - `data_driver.py` just wraps it up nicely and creates a `.csv` dataset.
 
 ### Data Pre-Processing
