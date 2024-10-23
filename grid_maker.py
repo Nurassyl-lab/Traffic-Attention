@@ -196,6 +196,18 @@ class GridMaker:
 
         return blue_pattern, red_pattern
 
+# write a function that plot matrix with two objects
+def plot_matrix(matrix, object1_loc, object2_loc, path):
+    """
+    - Plot the matrix with two objects
+    """
+    cmap = ListedColormap(['white', 'red', 'blue'])
+    plt.matshow(matrix, cmap=cmap)
+    plt.title('Grid with two objects')
+    save_path = f'{path}.png'
+    plt.savefig(save_path)
+    plt.close()
+
 
 class GridAnimator:
     def __init__(self, grid, blue_pattern, red_pattern, cmap):
@@ -273,9 +285,17 @@ if __name__ == '__main__':
         # find paths that leads to a non-collision
         blue_actions, red_actions = my_grid.find_non_collision_path(blue_position, red_position, max_length=10, randomness_factor=0.1)
 
-        cmap = ListedColormap(['white', 'red', 'blue'])
+        for pos_blue, pos_red in zip(blue_actions, red_actions):
+            my_grid.grid.fill(0)# this line is added to clear the grid at each step
+            my_grid.grid[pos_blue] = 2
+            my_grid.grid[pos_red] = 1
+            plot_matrix(my_grid.grid, pos_blue, pos_red)
 
-        my_animation = GridAnimator(my_grid.grid, blue_actions, red_actions, cmap)
 
-        my_animation.animate()
+        # for animation uncomment
+        # cmap = ListedColormap(['white', 'red', 'blue'])
+
+        # my_animation = GridAnimator(my_grid.grid, blue_actions, red_actions, cmap)
+
+        # my_animation.animate()
      
