@@ -84,6 +84,11 @@ class GridMaker:
         obj1_pos = self.side_selection(side1)
         obj2_pos = self.side_selection(side2)
 
+        #TODO: I was too lazy to write a condition that doesn't allow for positions to be generated on the same coordinates
+        # WILL DO IT LATER
+        if obj1_pos == obj2_pos:
+            obj2_pos = self.side_selection(side2)
+
         obj1_direction = self.get_fixed_direction(obj1_pos)
         obj2_direction = self.get_fixed_direction(obj2_pos)
 
@@ -321,7 +326,7 @@ def plot_grid(grid_size, object1_loc, object2_loc, path):
     matrix[object1_loc[0], object1_loc[1]] = 2
     matrix[object2_loc[0], object2_loc[1]] = 1
     
-    plt.matshow(matrix, cmap=cmap, origin='upper', extent=[0, grid_size, 0, grid_size])
+    plt.matshow(matrix, cmap=cmap,  origin='upper', extent=[0, grid_size, 0, grid_size])
     plt.grid(True)
     plt.title('Grid with two objects')
     ticks = np.arange(grid_size)
