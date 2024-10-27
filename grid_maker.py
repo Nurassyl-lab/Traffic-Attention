@@ -59,16 +59,19 @@ class GridMaker:
 
     def get_fixed_direction(self, obj_pos):
         # move objects up, down, left, right depending on the starting position
-        if obj_pos[0] == 0:
-            obj1_actions = "down"
-        elif obj_pos[0] == self.grid_size - 1:
-            obj1_actions = "up"
-        elif obj_pos[1] == 0:
-            obj1_actions = "left"
-        else:
-            obj1_actions = "right"
+        # if obj_pos[0] == 0:
+        #     obj_actions = "down"
+        # elif obj_pos[0] == self.grid_size - 1:
+        #     obj_actions = "up"
+        # elif obj_pos[1] == 0:
+        #     obj_actions = "left"
+        # else:
+        #     obj_actions = "right"
+        
+        # randomly select the direction of the object
+        obj_actions = random.choice(['up', 'down', 'left', 'right'])
 
-        return obj1_actions
+        return obj_actions
 
     def fix_direction_action(self):
         # randomly select the direction of the object
@@ -330,7 +333,7 @@ def plot_grid(grid_size, object1_loc, object2_loc, path):
     plt.grid(True)
     ticks = np.arange(grid_size)
     plt.xlabel('X-axis')
-    
+
     # Set the xlabel at the top
     plt.gca().set_xlabel('X-axis', labelpad=10)  # Adjust labelpad for spacing
     # Move xlabel to the top
