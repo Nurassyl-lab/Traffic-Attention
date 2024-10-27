@@ -18,15 +18,14 @@ if __name__ == '__main__':
 
     df = pd.read_csv(data_path)
 
-    for i in tqdm(range(len(df)), desc='Visualizing the dataset'):
-        grid_size = df['grid_size'][i]
-        object1_actions = df['object1_action'][i]
-        object2_actions = df['object2_action'][i]
-        collision_status = df['collision_status'][i]
+    if args.collision_only:
+        df = df[df['collision_status'] == 1]
 
-
-        if args.collision_only and collision_status == 0:
-            continue
+    for i, row in tqdm(df.iterrows(), desc='Visualizing the dataset', total=len(df)):
+        grid_size = row['grid_size']
+        object1_actions = row['object1_action']
+        object2_actions = row['object2_action']
+        collision_status = row['collision_status']
 
         object1_actions = eval(object1_actions)
         object2_actions = eval(object2_actions)
@@ -35,4 +34,3 @@ if __name__ == '__main__':
         matrix = np.zeros((grid_size, grid_size))
         for j, (obj1_pos, obj2_pos) in enumerate(zip(object1_actions, object2_actions)):
             plot_grid(grid_size, obj1_pos, obj2_pos, path=f'./data/grid_dataset_fixed_direction_images/sample{i+1}_frame{j}')
-        

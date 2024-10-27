@@ -326,12 +326,22 @@ def plot_grid(grid_size, object1_loc, object2_loc, path):
     matrix[object1_loc[0], object1_loc[1]] = 2
     matrix[object2_loc[0], object2_loc[1]] = 1
     
-    plt.matshow(matrix, cmap=cmap,  origin='upper', extent=[0, grid_size, 0, grid_size])
+    plt.matshow(matrix.T, cmap=cmap,  origin='upper', extent=[0, grid_size, 0, grid_size])
     plt.grid(True)
-    plt.title('Grid with two objects')
     ticks = np.arange(grid_size)
+    plt.xlabel('X-axis')
+    
+    # Set the xlabel at the top
+    plt.gca().set_xlabel('X-axis', labelpad=10)  # Adjust labelpad for spacing
+    # Move xlabel to the top
+    plt.gca().xaxis.set_label_position('top')
+    plt.gca().xaxis.tick_top()  # Move ticks to the top if needed
+
+    plt.ylabel('Y-axis')
     plt.xticks(ticks)
     plt.yticks(ticks)
+    plt.gca().set_yticklabels(ticks[::-1])
+
     save_path = f'{path}.png'
     plt.savefig(save_path)
     plt.close()
