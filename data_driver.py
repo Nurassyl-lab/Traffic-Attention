@@ -1,7 +1,7 @@
 # Driver file for the data, datasets, dataloaders, and etc
 
 import argparse
-from grid_maker import GridMaker
+from grid_maker import GridMaker, plot_matrix
 import pandas as pd 
 import numpy as np
 from tqdm import tqdm
@@ -54,6 +54,13 @@ if __name__ == '__main__':
                 dataset['collision_status'].append(1)
                 dataset['object1_action'].append(object1_coll_actions)
                 dataset['object2_action'].append(object2_coll_actions)
+                
+                for j, (pos_1, pos_2) in enumerate(zip(object1_coll_actions, object2_coll_actions)):
+                    grid_maker.grid.fill(0)
+                    grid_maker.grid[pos_1] = 2
+                    grid_maker.grid[pos_2] = 1
+                    plot_matrix(grid_maker.grid, pos_1, pos_1, path=f'./data/grid_dataset_images/sample{i+1}_frame{j}')
+
             else:
                 max_length = np.random.randint(3, 10)
                 object1_noncoll_actions, object2_noncoll_actions = grid_maker.find_non_collision_path(object1_pos, object2_pos, max_length=max_length, randomness_factor=0.1)
