@@ -42,6 +42,123 @@ class GridMaker:
                     print(f'Initial distance: {distance}\n')
                 return blue_position, red_position
 
+    def side_selection(self, side):
+        if side == 'left':
+            x = random.randint(0, 2)
+            y = random.randint(0, self.grid_size - 1) 
+        elif side == 'right':
+            x = random.randint(self.grid_size - 3, self.grid_size - 1)
+            y = random.randint(0, self.grid_size - 1)
+        elif side == 'top':
+            x = random.randint(0, self.grid_size - 1)
+            y = random.randint(self.grid_size - 3, self.grid_size - 1)
+        elif side == 'bottom':
+            x = random.randint(0, self.grid_size - 1)
+            y = random.randint(0, 2)
+        return (x, y)
+
+    def get_fixed_direction(self, obj_pos):
+        # move objects up, down, left, right depending on the starting position
+        # if obj_pos[0] == 0:
+        #     obj_actions = "down"
+        # elif obj_pos[0] == self.grid_size - 1:
+        #     obj_actions = "up"
+        # elif obj_pos[1] == 0:
+        #     obj_actions = "left"
+        # else:
+        #     obj_actions = "right"
+        
+        # randomly select the direction of the object
+        obj_actions = random.choice(['up', 'down', 'left', 'right'])
+
+        return obj_actions
+
+    def fix_direction_action(self):
+        # randomly select the direction of the object
+        # if the object is at the edge of the grid, it will move in the opposite direction
+
+        # starting position of the objects could be either (x,0~2) or (0~2,y)
+
+        # randomly select at what side of the grid the object will start
+        # left or right, bottom or top
+        side1 = random.choice(['left', 'right', 'top', 'bottom'])
+        side2 = random.choice(['left', 'right', 'top', 'bottom'])
+
+        obj1_pos = self.side_selection(side1)
+        obj2_pos = self.side_selection(side2)
+
+        #TODO: I was too lazy to write a condition that doesn't allow for positions to be generated on the same coordinates
+        # WILL DO IT LATER
+        if obj1_pos == obj2_pos:
+            obj2_pos = self.side_selection(side2)
+
+        obj1_direction = self.get_fixed_direction(obj1_pos)
+        obj2_direction = self.get_fixed_direction(obj2_pos)
+
+        # given the direction move the object to the opposite direction
+        # record every move
+        # if the objects end up on the same position, stop the movement, return the actions
+        # if object reach the edge of the grid stop the movement for that object, keep recording his last action, but 
+        # do not stop recording action of the other object
+        obj1_actions = []
+        obj2_actions = []
+
+        # append initial positions
+        obj1_actions.append(obj1_pos)
+        obj2_actions.append(obj2_pos)
+
+        collisions = []
+        for i in range(self.grid_size):
+            if obj1_pos == obj2_pos:
+                collisions.append(1)
+                break
+
+            if obj1_direction == 'up':
+                obj1_pos = (obj1_pos[0] - 1, obj1_pos[1])
+                if obj1_pos == (-1, obj1_pos[1]):
+                    obj1_pos = (0, obj1_pos[1]) # does not let the object go out of the grid
+            elif obj1_direction == 'down':
+                obj1_pos = (obj1_pos[0] + 1, obj1_pos[1])
+                if obj1_pos == (self.grid_size, obj1_pos[1]):
+                    obj1_pos = (self.grid_size - 1, obj1_pos[1])
+            elif obj1_direction == 'left':
+                obj1_pos = (obj1_pos[0], obj1_pos[1] - 1)
+                if obj1_pos == (obj1_pos[0], -1):
+                    obj1_pos = (obj1_pos[0], 0)
+            elif obj1_direction == 'right':
+                obj1_pos = (obj1_pos[0], obj1_pos[1] + 1)
+                if obj1_pos == (obj1_pos[0], self.grid_size):
+                    obj1_pos = (obj1_pos[0], self.grid_size - 1)
+
+            if obj2_direction == 'up':
+                obj2_pos = (obj2_pos[0] - 1, obj2_pos[1])
+                if obj2_pos == (-1, obj2_pos[1]):
+                    obj2_pos = (0, obj2_pos[1])
+            elif obj2_direction == 'down':
+                obj2_pos = (obj2_pos[0] + 1, obj2_pos[1])
+                if obj2_pos == (self.grid_size, obj2_pos[1]):
+                    obj2_pos = (self.grid_size - 1, obj2_pos[1])
+            elif obj2_direction == 'left':
+                obj2_pos = (obj2_pos[0], obj2_pos[1] - 1)
+                if obj2_pos == (obj2_pos[0], -1):
+                    obj2_pos = (obj2_pos[0], 0)
+            elif obj2_direction == 'right':
+                obj2_pos = (obj2_pos[0], obj2_pos[1] + 1)
+                if obj2_pos == (obj2_pos[0], self.grid_size):
+                    obj2_pos = (obj2_pos[0], self.grid_size - 1)
+
+            # if obje#_pos is the same as obj1_actions[-1] then break the loop
+            if obj1_pos == obj1_actions[-1] and obj2_pos == obj2_actions[-1]:
+                break
+
+            obj1_actions.append(obj1_pos)
+            obj2_actions.append(obj2_pos)
+
+        if collisions == []:
+            collisions.append(0)
+        return obj1_actions, obj2_actions, collisions
+
+
     def find_path(self, start_pos_blue, start_pos_red, randomness_factor=0.2):
         """
         - Creates movement patterns for both blue and red rectangles with some randomness added.
@@ -196,14 +313,38 @@ class GridMaker:
 
         return blue_pattern, red_pattern
 
+#TODO: move to grid_dataset_visualizer.py
 # write a function that plot matrix with two objects
-def plot_matrix(matrix, object1_loc, object2_loc, path):
+def plot_grid(grid_size, object1_loc, object2_loc, path):
+    matrix = np.zeros((grid_size, grid_size))
     """
     - Plot the matrix with two objects
     """
-    cmap = ListedColormap(['white', 'red', 'blue'])
-    plt.matshow(matrix, cmap=cmap)
-    plt.title('Grid with two objects')
+    if object1_loc == object2_loc:
+        cmap = ListedColormap(['white', 'green', 'green'])
+    else:
+        cmap = ListedColormap(['white', 'red', 'blue'])
+
+    # place the objects on the grid
+    matrix[object1_loc[0], object1_loc[1]] = 2
+    matrix[object2_loc[0], object2_loc[1]] = 1
+    
+    plt.matshow(matrix.T, cmap=cmap,  origin='upper', extent=[0, grid_size, 0, grid_size])
+    plt.grid(True)
+    ticks = np.arange(grid_size)
+    plt.xlabel('X-axis')
+
+    # Set the xlabel at the top
+    plt.gca().set_xlabel('X-axis', labelpad=10)  # Adjust labelpad for spacing
+    # Move xlabel to the top
+    plt.gca().xaxis.set_label_position('top')
+    plt.gca().xaxis.tick_top()  # Move ticks to the top if needed
+
+    plt.ylabel('Y-axis')
+    plt.xticks(ticks)
+    plt.yticks(ticks)
+    plt.gca().set_yticklabels(ticks[::-1])
+
     save_path = f'{path}.png'
     plt.savefig(save_path)
     plt.close()
