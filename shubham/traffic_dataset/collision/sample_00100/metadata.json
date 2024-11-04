@@ -1,0 +1,19 @@
+{
+  "sample_id": 100,
+  "has_collision": true,
+  "collision_details": {
+    "frame": 173,
+    "collisions": [
+      {
+        "types": [
+          "vehicle",
+          "pedestrian"
+        ],
+        "location": [
+          4,
+          6
+        ]
+      }
+    ]
+  }
+}
