@@ -13,3 +13,8 @@ data/
 # Misc
 papers/
 *.png
+.env
+shubham/.env
+shubham/traffic_dataset/
+shubham/animations/
+shubham/.ipynb_checkpoints/
